@@ -1,0 +1,9 @@
+.env
+backgrounds/*.jpg
+!backgrounds/.gitkeep
+/hallway-dash
+
+# Local Claude Code session/permission state — may contain local
+# machine details (LAN IPs, PIDs, session IDs). Never publish this.
+.claude/
+.DS_Store

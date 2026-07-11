@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>hallway-dash</Name>
+  <Repository>mbirnbach/hallway-dash</Repository>
+  <Registry>https://hub.docker.com/r/mbirnbach/hallway-dash</Registry>
+  <Network>bridge</Network>
+  <MyIP/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/mbirnbach/hallway-dash/issues</Support>
+  <Project>https://github.com/mbirnbach/hallway-dash</Project>
+  <Overview>Self-hosted, always-on wall-display dashboard for a hallway/kitchen TV (portrait orientation). Shows clock, date, current weather + 6-day forecast, sunrise/sunset, indoor temp/humidity (via Home Assistant), a rolling 4-week calendar (personal events + waste/bin-collection days), a NINA/BBK civil-protection alert banner, a rotating monthly background photo, and a random joke. Every third-party API call (Open-Meteo, ICS feeds, NINA, Home Assistant, joke source) happens server-side, so no browser CORS issues and your Home Assistant token never reaches the display. Every data source degrades gracefully if unset or unreachable - nothing is required to get it running. See https://github.com/mbirnbach/hallway-dash for full setup docs.</Overview>
+  <Category>HomeAutomation: Tools:</Category>
+  <WebUI>http://[IP]:[PORT:8080]/</WebUI>
+  <TemplateURL>https://raw.githubusercontent.com/mbirnbach/unraid-docker-templates/main/hallway-dash.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/mbirnbach/hallway-dash/main/icon.png</Icon>
+  <ExtraParams></ExtraParams>
+  <Date>2026-07-11</Date>
+  <Description>Self-hosted, always-on wall-display dashboard for a hallway/kitchen TV. Clock, weather, rolling 4-week calendar (personal + waste/bin collection), civil-protection alerts, monthly background photo, and a joke - all rendered fullscreen for a browser kiosk. Point a browser/kiosk device at http://[IP]:[PORT:8080]/ once running.</Description>
+
+  <Networking>
+    <Mode>bridge</Mode>
+    <Publish>
+      <Port>
+        <HostPort>8080</HostPort>
+        <ContainerPort>8080</ContainerPort>
+        <Protocol>tcp</Protocol>
+      </Port>
+    </Publish>
+  </Networking>
+
+  <Data>
+    <Volume>
+      <HostDir>/mnt/user/appdata/hallway-dash/backgrounds</HostDir>
+      <ContainerDir>/app/backgrounds</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+  </Data>
+
+  <Environment>
+    <Variable><Value>52.52</Value><Name>LATITUDE</Name></Variable>
+    <Variable><Value>13.405</Value><Name>LONGITUDE</Name></Variable>
+    <Variable><Value>Zuhause</Value><Name>LOCATION_LABEL</Name></Variable>
+    <Variable><Value></Value><Name>CALENDAR_ICS_URL</Name></Variable>
+    <Variable><Value></Value><Name>WASTE_ICS_URL</Name></Variable>
+    <Variable><Value></Value><Name>AGS_CODE</Name></Variable>
+    <Variable><Value>https://nopunintended.xyz</Value><Name>JOKE_API_URL</Name></Variable>
+    <Variable><Value></Value><Name>HA_URL</Name></Variable>
+    <Variable><Value></Value><Name>HA_TOKEN</Name></Variable>
+    <Variable><Value>sensor.hallway_temperature</Value><Name>HA_TEMP_ENTITY</Name></Variable>
+    <Variable><Value>sensor.hallway_humidity</Value><Name>HA_HUMIDITY_ENTITY</Name></Variable>
+    <Variable><Value>24h</Value><Name>CLOCK_FORMAT</Name></Variable>
+    <Variable><Value>#F5A524</Value><Name>ACCENT_COLOR</Name></Variable>
+  </Environment>
+
+  <!-- WebUI port -->
+  <Config Name="WebUI Port" Target="8080" Default="8080" Mode="tcp" Description="Port the dashboard is served on" Type="Port" Display="always-show" Required="true" Mask="false">8080</Config>
+
+  <!-- Backgrounds folder -->
+  <Config Name="Backgrounds Folder" Target="/app/backgrounds" Default="/mnt/user/appdata/hallway-dash/backgrounds" Mode="rw" Description="Folder containing 01.jpg ... 12.jpg monthly background photos. Missing months fall back to a placeholder automatically." Type="Path" Display="always-show" Required="false" Mask="false">/mnt/user/appdata/hallway-dash/backgrounds</Config>
+
+  <!-- Weather / location -->
+  <Config Name="Latitude" Target="LATITUDE" Default="52.52" Mode="" Description="Latitude for Open-Meteo weather lookups" Type="Variable" Display="always-show" Required="false" Mask="false">52.52</Config>
+  <Config Name="Longitude" Target="LONGITUDE" Default="13.405" Mode="" Description="Longitude for Open-Meteo weather lookups" Type="Variable" Display="always-show" Required="false" Mask="false">13.405</Config>
+  <Config Name="Location Label" Target="LOCATION_LABEL" Default="Zuhause" Mode="" Description="Display name shown next to the current weather" Type="Variable" Display="always-show" Required="false" Mask="false">Zuhause</Config>
+
+  <!-- Calendars -->
+  <Config Name="Personal Calendar ICS URL" Target="CALENDAR_ICS_URL" Default="" Mode="" Description="ICS feed URL for your personal calendar (leave blank to hide)" Type="Variable" Display="always-show" Required="false" Mask="false"></Config>
+  <Config Name="Waste/Bin Calendar ICS URL" Target="WASTE_ICS_URL" Default="" Mode="" Description="ICS feed URL for waste/bin-collection days (leave blank to hide, renders as amber pills)" Type="Variable" Display="always-show" Required="false" Mask="false"></Config>
+
+  <!-- Civil protection alerts -->
+  <Config Name="AGS Code" Target="AGS_CODE" Default="" Mode="" Description="12-digit Amtlicher Gemeindeschluessel for NINA/BBK civil-protection alerts (leave blank to disable)" Type="Variable" Display="always-show" Required="false" Mask="false"></Config>
+
+  <!-- Joke source -->
+  <Config Name="Joke API URL" Target="JOKE_API_URL" Default="https://nopunintended.xyz" Mode="" Description="Joke source (plain-text response expected); falls back to JokeAPI.dev automatically if unreachable" Type="Variable" Display="always-show" Required="false" Mask="false">https://nopunintended.xyz</Config>
+
+  <!-- Home Assistant -->
+  <Config Name="Home Assistant URL" Target="HA_URL" Default="" Mode="" Description="Base URL of your Home Assistant instance, e.g. http://192.168.1.10:8123 (leave blank to hide indoor stat)" Type="Variable" Display="always-show" Required="false" Mask="false"></Config>
+  <Config Name="Home Assistant Token" Target="HA_TOKEN" Default="" Mode="" Description="Home Assistant long-lived access token" Type="Variable" Display="always-show" Required="false" Mask="true"></Config>
+  <Config Name="Home Assistant Temperature Entity" Target="HA_TEMP_ENTITY" Default="sensor.hallway_temperature" Mode="" Description="Entity ID of your indoor temperature sensor" Type="Variable" Display="always-show" Required="false" Mask="false">sensor.hallway_temperature</Config>
+  <Config Name="Home Assistant Humidity Entity" Target="HA_HUMIDITY_ENTITY" Default="sensor.hallway_humidity" Mode="" Description="Entity ID of your indoor humidity sensor" Type="Variable" Display="always-show" Required="false" Mask="false">sensor.hallway_humidity</Config>
+
+  <!-- Display -->
+  <Config Name="Clock Format" Target="CLOCK_FORMAT" Default="24h" Mode="" Description="24h or 12h" Type="Variable" Display="always-show" Required="false" Mask="false">24h</Config>
+  <Config Name="Accent Color" Target="ACCENT_COLOR" Default="#F5A524" Mode="" Description="Hex accent color used for bin-day pills, today's date circle, and the &quot;Heute&quot; label" Type="Variable" Display="always-show" Required="false" Mask="false">#F5A524</Config>
+</Container>

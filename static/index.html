@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hallway Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="viewport">
+  <div class="canvas" id="canvas">
+
+    <div class="bg-gradient-fallback"></div>
+    <img class="bg-photo" id="bg-photo" alt="">
+    <div class="scrim"></div>
+
+    <div class="content">
+
+      <header class="header">
+        <div class="clock" id="clock">--:--</div>
+        <div class="date" id="date">&nbsp;</div>
+      </header>
+
+      <section class="weather">
+        <div class="weather-now">
+          <div class="temp" id="temp">—</div>
+          <div class="icon" id="icon"></div>
+          <div class="labels">
+            <div class="location" id="location">—</div>
+            <div class="feels" id="feels">Gefühlt wie —°</div>
+          </div>
+          <div class="stats">
+            <div class="stat">
+              <div class="stat-label">Sonnenauf.</div>
+              <div class="stat-value" id="sunrise">—</div>
+            </div>
+            <div class="stat">
+              <div class="stat-label">Sonnenunt.</div>
+              <div class="stat-value" id="sunset">—</div>
+            </div>
+            <div class="stat" id="indoor-stat" hidden>
+              <div class="stat-label">Innen</div>
+              <div class="stat-value" id="indoor">—</div>
+            </div>
+          </div>
+        </div>
+        <div class="forecast" id="forecast"></div>
+      </section>
+
+      <section class="calendar">
+        <div class="weekday-row" id="weekday-row"></div>
+        <div class="calendar-grid" id="calendar-grid"></div>
+      </section>
+
+      <div class="alert-banner" id="alert-banner" hidden>
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+          <path d="M12 3L2 20H22L12 3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+          <path d="M12 9.5V14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          <circle cx="12" cy="17" r="1.1" fill="currentColor"/>
+        </svg>
+        <div class="alert-text" id="alert-text"></div>
+      </div>
+
+      <div class="joke" id="joke" hidden></div>
+
+    </div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

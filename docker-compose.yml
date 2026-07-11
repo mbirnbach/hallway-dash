@@ -1,0 +1,37 @@
+services:
+  hallway-dash:
+    image: mbirnbach/hallway-dash:latest
+    # Building from source instead of pulling the published image?
+    # Comment out `image:` above and uncomment the line below.
+    # build: .
+    container_name: hallway-dash
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      # Weather (Open-Meteo) + display location label
+      LATITUDE: "${LATITUDE:-52.52}"
+      LONGITUDE: "${LONGITUDE:-13.405}"
+      LOCATION_LABEL: "${LOCATION_LABEL:-Zuhause}"
+
+      # ICS calendar feeds
+      CALENDAR_ICS_URL: "${CALENDAR_ICS_URL:-}"
+      WASTE_ICS_URL: "${WASTE_ICS_URL:-}"
+
+      # NINA/BBK civil-protection alerts (12-digit AGS code)
+      AGS_CODE: "${AGS_CODE:-}"
+
+      # Joke source (defaults to nopunintended.xyz; falls back to JokeAPI.dev)
+      JOKE_API_URL: "${JOKE_API_URL:-https://nopunintended.xyz}"
+
+      # Home Assistant indoor temp/humidity (leave blank to hide the block)
+      HA_URL: "${HA_URL:-}"
+      HA_TOKEN: "${HA_TOKEN:-}"
+      HA_TEMP_ENTITY: "${HA_TEMP_ENTITY:-}"
+      HA_HUMIDITY_ENTITY: "${HA_HUMIDITY_ENTITY:-}"
+
+      # Display
+      CLOCK_FORMAT: "${CLOCK_FORMAT:-24h}"
+      ACCENT_COLOR: "${ACCENT_COLOR:-#F5A524}"
+    volumes:
+      - ./backgrounds:/app/backgrounds

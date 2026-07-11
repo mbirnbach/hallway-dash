@@ -1,0 +1,4 @@
+.git
+.env
+backgrounds/*.jpg
+!backgrounds/.gitkeep
